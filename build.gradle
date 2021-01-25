@@ -1,0 +1,51 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        jcenter()
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+        maven { url "https://oss.sonatype.org/content/repositories/releases/" }
+        maven { url "https://maven.google.com/" }
+    }
+
+}
+
+allprojects {
+
+    version = '1.0.0'
+    ext {
+        appName = 'JGLauncher'
+        mini2DxVersion = '2.0.0-alpha.42'
+        gdxVersion = '1.9.13'
+    }
+
+    repositories {
+        mavenCentral()
+        jcenter()
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+        maven { url "https://oss.sonatype.org/content/repositories/releases/" }
+    }
+}
+
+project(":core") {
+    apply plugin: "java"
+
+
+    dependencies {
+        implementation "org.mini2Dx:mini2dx-libgdx-desktop-lwjgl3:$mini2DxVersion"
+        implementation "org.mini2Dx:mini2dx-core:$mini2DxVersion"
+        implementation "org.mini2Dx:mini2dx-ui:$mini2DxVersion"
+    }
+}
+
+project(":desktop") {
+    apply plugin: "java"
+    apply plugin: "application"
+
+
+    dependencies {
+        implementation project(":core")
+        implementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+        implementation "org.mini2Dx:mini2dx-libgdx-desktop-lwjgl3:$mini2DxVersion"
+    }
+    
+}

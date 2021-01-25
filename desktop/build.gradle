@@ -1,0 +1,16 @@
+apply plugin: "application"
+
+sourceSets.main.java.srcDirs = [ "src/" ]
+
+mainClassName = "io.github.torbuntu.desktop.DesktopLauncher"
+project.ext.assetsDir = new File("$projectDir/../assets");
+
+sourceSets.main.resources.srcDirs = [project.ext.assetsDir.getAbsolutePath()]
+
+task launchDesktop(dependsOn: classes, type: JavaExec) {
+    main = project.mainClassName
+    classpath = sourceSets.main.runtimeClasspath
+    standardInput = System.in
+    workingDir = project.assetsDir
+    ignoreExitValue = true
+}
