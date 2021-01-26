@@ -34,7 +34,6 @@ public class Menu extends BasicGameScreen {
 
     Menu(HashMap<String, String> gameList) {
         this.gameList = gameList;
-        
         titles = new ArrayList<>();
         gameList.forEach((title, path) -> {
             titles.add(title);
@@ -57,7 +56,7 @@ public class Menu extends BasicGameScreen {
         }
 
         if (Mdx.input.isKeyJustPressed(Keys.RIGHT)) {
-            if (index < gameList.size()) {
+            if (index < gameList.size() - 1) {
                 index++;
             }
         }
@@ -69,24 +68,28 @@ public class Menu extends BasicGameScreen {
 
         if (Mdx.input.isKeyJustPressed(Keys.ENTER)) {
             String path = gameList.get(titles.get(index));
-            
+
             try {
                 Arrays.asList(Mdx.files.external(path).list()).forEach(item -> {
-                    if(!item.isDirectory()){
-                        if("jar".equals(item.extension())) {
-                            var game = new File(path+"/"+item.name());
+                    if (!item.isDirectory()) {
+                        if ("jar".equals(item.extension())) {
+                            var game = new File(path + "/" + item.name());
+                            String[] command = new String[3];
+                            command[0] = "java";
+                            command[1] = "-jar";
+                            command[2] = game.getName();
                             try {
-                                Runtime.getRuntime().exec("java -jar " + game.getName(), null, game.getParentFile());
+                                Runtime.getRuntime().exec(command, null, game.getParentFile());
                             } catch (IOException ex) {
-                                 Mdx.log.error("Menu", ex.getMessage());
+                                Mdx.log.error("Menu", ex.getMessage());
                             }
                         }
                     }
                 });
             } catch (IOException ex) {
-                 Mdx.log.error("Menu", ex.getMessage());
+                Mdx.log.error("Menu", ex.getMessage());
             }
-            
+
         }
     }
 
@@ -94,7 +97,7 @@ public class Menu extends BasicGameScreen {
     public void render(GameContainer gc, Graphics g) {
         viewport.apply(g);
         g.drawString("Menu", 0, 0, 360, 1);
-        g.drawString("Selection:\n"+titles.get(index), 0, 8);
+        g.drawString("Selection:\n" + titles.get(index), 0, 8);
     }
 
     @Override
